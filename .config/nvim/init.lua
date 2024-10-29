@@ -318,8 +318,12 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
 			-- vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-			vim.keymap.set("n", "<C-p>", builtin.git_files, { desc = "Search [P]roject Files" })
+			vim.keymap.set("n", "<leader>sf", function()
+				builtin.find_files({ hidden = true })
+			end, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<C-p>", function()
+				builtin.git_files({ show_untracked = true })
+			end, { desc = "Search [P]roject Files" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
@@ -860,6 +864,10 @@ require("lazy").setup({
 	{
 		"mbbill/undotree",
 	},
+	{
+		"nvim-telescope/telescope-file-browser.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+	},
 	-- ---END JONS ADDED PLUGINS---
 
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -915,9 +923,15 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.keymap.set("n", "<leader>oo", ":Explore<cr>", { desc = "[O]pen the explorer" })
-vim.keymap.set("n", "<leader>f", function()
+vim.keymap.set("n", "<leader>ff", function()
 	require("conform").format({ async = true, lsp_format = "fallback" })
 end, { desc = "[F]ormat buffer" })
+vim.keymap.set(
+	"n",
+	"<leader>fb",
+	":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+	{ desc = "[F]ile [B]rowser" }
+)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et
