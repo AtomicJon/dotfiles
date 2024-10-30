@@ -532,7 +532,9 @@ require("lazy").setup({
 			local servers = {
 				prettierd = {},
 				ts_ls = {},
-				eslint_d = {},
+				eslint = {},
+				-- Currently using eslint instead of eslint_d due to prettier errors not being shown
+				-- eslint_d = {},
 				-- clangd = {},
 				-- gopls = {},
 				-- pyright = {},
@@ -631,10 +633,10 @@ require("lazy").setup({
 				-- python = { "isort", "black" },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
-				javascriptreact = { "eslint_d", "prettierd", "prettier" }, -- , stop_after_first = true },
-				javascript = { "eslint_d", "prettierd", "prettier" }, -- , stop_after_first = true },
-				typescriptreact = { "eslint_d", "prettierd", "prettier" },
-				typescript = { "eslint_d", "prettierd", "prettier" },
+				javascriptreact = { "eslint", "prettierd", "prettier", stop_after_first = true }, -- , stop_after_first = true },
+				javascript = { "eslint", "prettierd", "prettier", stop_after_first = true }, -- , stop_after_first = true },
+				typescriptreact = { "eslint", "prettierd", "prettier", stop_after_first = true },
+				typescript = { "eslint", "prettierd", "prettier", stop_after_first = true },
 				["*"] = { "trim_whitespace" },
 			},
 		},
