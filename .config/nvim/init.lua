@@ -601,7 +601,8 @@ require("lazy").setup({
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>f",
+				-- modified from <leader>f
+				"<leader>ff",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
@@ -925,9 +926,6 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.keymap.set("n", "<leader>oo", ":Explore<cr>", { desc = "[O]pen the explorer" })
-vim.keymap.set("n", "<leader>ff", function()
-	require("conform").format({ async = true, lsp_format = "fallback" })
-end, { desc = "[F]ormat buffer" })
 vim.keymap.set(
 	"n",
 	"<leader>fb",
