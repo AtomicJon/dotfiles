@@ -167,6 +167,8 @@ require("lazy").setup({
 				topdelete = { text = "‾" },
 				changedelete = { text = "~" },
 			},
+			signcolumn = true,
+			numhl = true,
 		},
 	},
 
@@ -302,6 +304,15 @@ require("lazy").setup({
 				--   },
 				-- },
 				-- pickers = {}
+				--
+				-- Use the following to close on first escape
+				-- defaults = {
+				-- 	mappings = {
+				-- 		i = {
+				-- 			["<esc>"] = require("telescope.actions").close,
+				-- 		},
+				-- 	},
+				-- },
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
@@ -321,14 +332,14 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sf", function()
 				builtin.find_files({ hidden = true })
 			end, { desc = "[S]earch [F]iles" })
-			vim.keymap.set("n", "<C-p>", function()
+			vim.keymap.set("n", "<leader>sp", function()
 				builtin.git_files({ show_untracked = true })
 			end, { desc = "Search [P]roject Files" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
 			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
+			vim.keymap.set("n", "<leader>sq", builtin.resume, { desc = "[S]earch Resume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 
@@ -871,6 +882,73 @@ require("lazy").setup({
 		"nvim-telescope/telescope-file-browser.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 	},
+	{
+		"folke/trouble.nvim",
+		opts = {},
+	},
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		opts = function(_, opts)
+			require("lualine").setup({
+				options = {
+					icons_enabled = true,
+					theme = "auto",
+					component_separators = { left = "", right = "" },
+					section_separators = { left = "", right = "" },
+					disabled_filetypes = {
+						statusline = {},
+						winbar = {},
+					},
+					ignore_focus = {},
+					always_divide_middle = true,
+					globalstatus = false,
+					refresh = {
+						statusline = 1000,
+						tabline = 1000,
+						winbar = 1000,
+					},
+				},
+				sections = {
+					lualine_a = { "mode" },
+					lualine_b = { "branch", "diff", "diagnostics" },
+					lualine_c = { "filename" },
+					lualine_x = { "encoding", "fileformat", "filetype" },
+					lualine_y = { "progress" },
+					lualine_z = { "location" },
+				},
+				inactive_sections = {
+					lualine_a = {},
+					lualine_b = {},
+					lualine_c = { "filename" },
+					lualine_x = { "location" },
+					lualine_y = {},
+					lualine_z = {},
+				},
+				tabline = {},
+				winbar = {},
+				inactive_winbar = {},
+				extensions = {},
+			})
+
+			-- -- From trouble's docs, need to review
+			-- local trouble = require("trouble")
+			-- local symbols = trouble.statusline({
+			-- 	mode = "lsp_document_symbols",
+			-- 	groups = {},
+			-- 	title = false,
+			-- 	filter = { range = true },
+			-- 	format = "{kind_icon}{symbol.name:Normal}",
+			-- 	-- The following line is needed to fix the background color
+			-- 	-- Set it to the lualine section you want to use
+			-- 	hl_group = "lualine_c_normal",
+			-- })
+			-- table.insert(opts.sections.lualine_c, {
+			-- 	symbols.get,
+			-- 	cond = symbols.has,
+			-- })
+		end,
+	},
 	-- ---END JONS ADDED PLUGINS---
 
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -932,6 +1010,9 @@ vim.keymap.set(
 	":Telescope file_browser path=%:p:h select_buffer=true<CR>",
 	{ desc = "[F]ile [B]rowser" }
 )
+vim.keymap.set("n", "<leader>sr", function()
+	require("telescope.builtin").lsp_references()
+end, { noremap = true, silent = true, desc = "[S]earch [R]eferences" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et
