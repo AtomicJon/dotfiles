@@ -1,3 +1,14 @@
+-- Custom functions
+local function organize_imports()
+	local params = {
+		command = "_typescript.organizeImports",
+		arguments = { vim.api.nvim_buf_get_name(0) },
+		title = "",
+	}
+	vim.lsp.buf.execute_command(params)
+end
+-- End Custom functions
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -314,7 +325,8 @@ require("lazy").setup({
 				-- 	},
 				-- },
 				defaults = {
-					path_display = { "smart" },
+					-- path_display = { "smart" },
+					path_display = { "truncate" },
 				},
 				extensions = {
 					["ui-select"] = {
@@ -545,7 +557,14 @@ require("lazy").setup({
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
 				prettierd = {},
-				ts_ls = {},
+				ts_ls = {
+					commands = {
+						OrganizeImports = {
+							organize_imports,
+							description = "Organize Imports",
+						},
+					},
+				},
 				eslint = {},
 				-- Currently using eslint instead of eslint_d due to prettier errors not being shown
 				-- eslint_d = {},
@@ -879,17 +898,37 @@ require("lazy").setup({
 	},
 	-- ---BEGIN JONS ADDED PLUGINS---
 	{
+		-- Auto session tracking/restoration
+		"rmagatti/auto-session",
+		lazy = false,
+		---enables autocomplete for opts
+		---@module "auto-session"
+		---@type AutoSession.Config
+		opts = {
+			-- suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+			-- log_level = 'debug',
+		},
+	},
+	{
+		-- Provides shows function/scope start context when off screen
+		"nvim-treesitter/nvim-treesitter-context",
+	},
+	{
+		-- Provides a tree view of undo history
 		"mbbill/undotree",
 	},
 	{
+		-- File browsing using telescope
 		"nvim-telescope/telescope-file-browser.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 	},
 	{
+		-- Issue indicators
 		"folke/trouble.nvim",
 		opts = {},
 	},
 	{
+		-- Better status line with configuration
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		opts = function(_, opts)
@@ -951,6 +990,14 @@ require("lazy").setup({
 			-- 	cond = symbols.has,
 			-- })
 		end,
+	},
+	{
+		-- Microsoft Copilot integration
+		"github/copilot.vim",
+	},
+	{
+		-- Git commands, e.g. Gdiffsplit
+		"tpope/vim-fugitive",
 	},
 	-- ---END JONS ADDED PLUGINS---
 
@@ -1016,6 +1063,8 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>sr", function()
 	require("telescope.builtin").lsp_references()
 end, { noremap = true, silent = true, desc = "[S]earch [R]eferences" })
+vim.keymap.set("n", "<leader>af", ":EslintFixAll<cr>", { desc = "[A]uto [F]ix" })
+vim.keymap.set("n", "<leader>ao", ":OrganizeImports<cr>", { desc = "[A]uto [O]rganize Imports" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et
