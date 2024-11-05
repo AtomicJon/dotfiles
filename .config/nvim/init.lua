@@ -1074,6 +1074,7 @@ vim.keymap.set("n", "<leader>sr", function()
 end, { noremap = true, silent = true, desc = "[S]earch [R]eferences" })
 vim.keymap.set("n", "<leader>af", ":EslintFixAll<cr>", { desc = "[A]uto [F]ix" })
 vim.keymap.set("n", "<leader>ao", ":OrganizeImports<cr>", { desc = "[A]uto [O]rganize Imports" })
+vim.keymap.set("n", "<leader>df", ":lua vim.diagnostic.open_float()<CR>", { desc = "[D]iagnostic [F]loat" })
 
 local vim_diag_signs = {
 	ERROR = "",
