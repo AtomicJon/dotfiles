@@ -16,7 +16,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -1053,6 +1053,15 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
+vim.g.copilot_filetypes = {
+	["*"] = false,
+	lua = true,
+	typescript = true,
+	typescriptreact = true,
+	javascript = true,
+	javascriptreact = true,
+}
+
 vim.keymap.set("n", "<leader>oo", ":Explore<cr>", { desc = "[O]pen the explorer" })
 vim.keymap.set(
 	"n",
@@ -1065,6 +1074,34 @@ vim.keymap.set("n", "<leader>sr", function()
 end, { noremap = true, silent = true, desc = "[S]earch [R]eferences" })
 vim.keymap.set("n", "<leader>af", ":EslintFixAll<cr>", { desc = "[A]uto [F]ix" })
 vim.keymap.set("n", "<leader>ao", ":OrganizeImports<cr>", { desc = "[A]uto [O]rganize Imports" })
+
+local vim_diag_signs = {
+	ERROR = "",
+	WARN = "",
+	HINT = "󰌵",
+	INFO = "",
+}
+
+local signs = {
+	{ name = "DiagnosticSignError", text = vim_diag_signs.ERROR },
+	{ name = "DiagnosticSignWarn", text = vim_diag_signs.WARN },
+	{ name = "DiagnosticSignHint", text = vim_diag_signs.HINT },
+	{ name = "DiagnosticSignInfo", text = vim_diag_signs.INFO },
+}
+
+-- signs in the gutter
+for _, sign in ipairs(signs) do
+	vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+end
+
+-- For signs inline by trouble
+vim.diagnostic.config({
+	virtual_text = {
+		prefix = function(diagnostic)
+			return vim_diag_signs[vim.diagnostic.severity[diagnostic.severity]]
+		end,
+	},
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et
