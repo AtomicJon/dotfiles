@@ -556,6 +556,8 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
+				bashls = {},
+				beautysh = {},
 				prettierd = {},
 				ts_ls = {
 					commands = {
@@ -671,6 +673,9 @@ require("lazy").setup({
 				javascript = { "eslint", "prettierd", "prettier", stop_after_first = true }, -- , stop_after_first = true },
 				typescriptreact = { "eslint", "prettierd", "prettier", stop_after_first = true },
 				typescript = { "eslint", "prettierd", "prettier", stop_after_first = true },
+				bash = { "beautysh" },
+				zsh = { "beautysh" },
+				sh = { "beautysh" },
 				["*"] = { "trim_whitespace" },
 			},
 		},
@@ -999,6 +1004,31 @@ require("lazy").setup({
 		-- Git commands, e.g. Gdiffsplit
 		"tpope/vim-fugitive",
 	},
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"MunifTanjim/nui.nvim",
+		},
+		config = function()
+			require("neo-tree").setup({
+				buffers = {
+					follow_current_file = {
+						enabled = true,
+					},
+				},
+				filesystem = {
+					follow_current_file = {
+						enabled = true,
+					},
+					filtered_items = {
+						visible = true,
+					},
+				},
+			})
+		end,
+	},
 	-- ---END JONS ADDED PLUGINS---
 
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1075,6 +1105,7 @@ end, { noremap = true, silent = true, desc = "[S]earch [R]eferences" })
 vim.keymap.set("n", "<leader>af", ":EslintFixAll<cr>", { desc = "[A]uto [F]ix" })
 vim.keymap.set("n", "<leader>ao", ":OrganizeImports<cr>", { desc = "[A]uto [O]rganize Imports" })
 vim.keymap.set("n", "<leader>df", ":lua vim.diagnostic.open_float()<CR>", { desc = "[D]iagnostic [F]loat" })
+vim.keymap.set("n", "<leader>ee", ":Neotree right<CR>", { desc = "[E]xplore" })
 
 local vim_diag_signs = {
 	ERROR = "",
