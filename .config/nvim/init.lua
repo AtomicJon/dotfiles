@@ -1039,6 +1039,27 @@ require("lazy").setup({
 		-- Debug Adapter Protocol for Neovim
 		"mfussenegger/nvim-dap",
 	},
+	{
+		"windwp/nvim-ts-autotag",
+		dependencies = "nvim-treesitter/nvim-treesitter",
+		config = function()
+			require("nvim-ts-autotag").setup({
+				enable = true,
+				filetypes = {
+					"html",
+					"xml",
+					"javascript",
+					"javascriptreact",
+					"typescript",
+					"typescriptreact",
+					"svelte",
+					"vue",
+				},
+			})
+		end,
+		lazy = true,
+		event = "VeryLazy",
+	},
 	-- ---END JONS ADDED PLUGINS---
 
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
