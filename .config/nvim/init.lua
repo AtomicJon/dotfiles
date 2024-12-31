@@ -556,9 +556,13 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
+				["js-debug-adapter"] = {},
 				bashls = {},
 				beautysh = {},
+				dockerls = {},
+				prismals = {},
 				prettierd = {},
+				jsonls = {},
 				ts_ls = {
 					commands = {
 						OrganizeImports = {
@@ -808,7 +812,8 @@ require("lazy").setup({
 			-- Load the colorscheme here.
 			-- Like many other themes, this one has different styles, and you could load
 			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
+			-- vim.cmd.colorscheme("tokyonight-night")
+			vim.cmd.colorscheme("tokyonight")
 
 			-- You can configure highlights by doing something like:
 			vim.cmd.hi("Comment gui=none")
@@ -1005,6 +1010,7 @@ require("lazy").setup({
 		"tpope/vim-fugitive",
 	},
 	{
+		-- Tree view of files
 		"nvim-neo-tree/neo-tree.nvim",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
@@ -1028,6 +1034,10 @@ require("lazy").setup({
 				},
 			})
 		end,
+	},
+	{
+		-- Debug Adapter Protocol for Neovim
+		"mfussenegger/nvim-dap",
 	},
 	-- ---END JONS ADDED PLUGINS---
 
@@ -1106,6 +1116,8 @@ vim.keymap.set("n", "<leader>af", ":EslintFixAll<cr>", { desc = "[A]uto [F]ix" }
 vim.keymap.set("n", "<leader>ao", ":OrganizeImports<cr>", { desc = "[A]uto [O]rganize Imports" })
 vim.keymap.set("n", "<leader>df", ":lua vim.diagnostic.open_float()<CR>", { desc = "[D]iagnostic [F]loat" })
 vim.keymap.set("n", "<leader>ee", ":Neotree right<CR>", { desc = "[E]xplore" })
+vim.keymap.set("n", "<leader>ut", ":UndotreeToggle<CR>", { desc = "[U]ndo [T]ree" })
+vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, { desc = "Rename" })
 
 local vim_diag_signs = {
 	ERROR = "",
@@ -1134,6 +1146,9 @@ vim.diagnostic.config({
 		end,
 	},
 })
+
+-- Colored column at 120 - highlighting the column handled by the theme
+vim.opt.colorcolumn = "120"
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et
