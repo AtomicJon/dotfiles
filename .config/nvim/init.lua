@@ -90,7 +90,7 @@ vim.opt.scrolloff = 10
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Diagnostic keymaps
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+-- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -349,6 +349,9 @@ require("lazy").setup({
 			end, { desc = "[S]earch [F]iles" })
 			vim.keymap.set("n", "<leader>sp", function()
 				builtin.git_files({ show_untracked = true })
+			end, { desc = "[S]earch [P]roject Files" })
+			vim.keymap.set("n", "<C-p>", function()
+				builtin.git_files({ show_untracked = true })
 			end, { desc = "Search [P]roject Files" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
@@ -572,6 +575,7 @@ require("lazy").setup({
 					},
 				},
 				eslint = {},
+				-- nginx_language_server = {},
 				-- Currently using eslint instead of eslint_d due to prettier errors not being shown
 				-- eslint_d = {},
 				-- clangd = {},
@@ -1060,6 +1064,10 @@ require("lazy").setup({
 		lazy = true,
 		event = "VeryLazy",
 	},
+	{
+		-- Delete buffers without closing windows
+		"ojroques/nvim-bufdel",
+	},
 	-- ---END JONS ADDED PLUGINS---
 
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1139,6 +1147,9 @@ vim.keymap.set("n", "<leader>df", ":lua vim.diagnostic.open_float()<CR>", { desc
 vim.keymap.set("n", "<leader>ee", ":Neotree right<CR>", { desc = "[E]xplore" })
 vim.keymap.set("n", "<leader>ut", ":UndotreeToggle<CR>", { desc = "[U]ndo [T]ree" })
 vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, { desc = "Rename" })
+vim.keymap.set("n", "<leader>qf", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uick[f]ix list" })
+vim.keymap.set("n", "<leader>qq", ":BufDel<CR>", { desc = "[Q]uit buffer (:BufDel)" })
+vim.keymap.set("n", "<leader>qo", ":BufDelOthers<CR>", { desc = "[Q]uit [o]ther buffers (:BufDelOthers)" })
 
 local vim_diag_signs = {
 	ERROR = "",
