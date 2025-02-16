@@ -15,16 +15,16 @@ start_mode () {
     do
         case $mode in
             dockerdev )
-                tmux new-session -s $session_name -n code -d -c $session_dir
-                tmux new-window -t $session_name -n cmd -c $session_dir
-                tmux new-window -t $session_name -n docker -c $session_dir
+                tmux new-session -s "$session_name" -n code -d -c "$session_dir"
+                tmux new-window -t "$session_name" -n cmd -c "$session_dir"
+                tmux new-window -t "$session_name" -n docker -c "$session_dir"
                 break ;;
             dualdev )
-                tmux new-session -s $session_name -n code -d -c $session_dir
-                tmux new-window -t $session_name -n cmd -c $session_dir
+                tmux new-session -s "$session_name" -n code -d -c "$session_dir"
+                tmux new-window -t "$session_name" -n cmd -c "$session_dir"
                 break ;;
             single )
-                tmux new-session -s $session_name -n code -d -c $session_dir
+                tmux new-session -s "$session_name" -n code -d -c "$session_dir"
                 break ;;
             * )
                 echo "Invalid option"
@@ -54,9 +54,9 @@ tmux_running=$(pgrep tmux)
 
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
     # tmux new-session -ds $selected_name -c $selected
-    start_mode $selected_name $selected
+    start_mode "$selected_name" "$selected"
 fi
 
-tmux switch-client -t $selected_name
+tmux switch-client -t "$selected_name"
 
 
